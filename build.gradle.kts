@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+    namespace = "com.hisense.einkservice"
     compileSdk = 34
 
     defaultConfig {
