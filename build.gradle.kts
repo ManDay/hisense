@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId = "com.hisense.einkservice"
         minSdk = 30
-        targetSdkVersion = 34
+        targetSdki = 34
         versionCode = 7
         versionName = "1.6"
         vectorDrawables {
