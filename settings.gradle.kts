@@ -4,13 +4,9 @@ pluginManagement {
         mavenCentral()
     }
 }
-buildscript {
-  repositories {
-    google()
-    mavenCentral()
-  }
-  dependencies {
-    classpath("com.android.tools.build:gradle:8.3.1")
-//    classpath("androidx.compose.compiler:compiler")
-  }
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
