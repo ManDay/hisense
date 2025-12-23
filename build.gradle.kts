@@ -1,5 +1,5 @@
 plugins {
-  id("com.android.application")
+  id("com.android.application:8.3.1")
 }
 
 android {
