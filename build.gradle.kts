@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion(34)
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.hisense.einkservice"
-        minSdkVersion(30)
-        targetSdkVersion(34)
+        minSdk = 30
+        targetSdkVersion = 34
         versionCode = 7
         versionName = "1.6"
         vectorDrawables {
@@ -26,16 +26,16 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core.ktx")
-    implementation("androidx.lifecycle.runtime.ktx")
-    implementation("androidx.activity.compose")
-    implementation("androidx.ui")
-    implementation("androidx.ui.graphics")
-    implementation("androidx.ui.tooling")
-    implementation("androidx.material3")
-    implementation("androidx.lifecycle.viewmodel.compose")
-    implementation("androidx.room.runtime")
-    implementation("accompanist.swiperefresh")
-    implementation("androidx.navigation.compose")
-    implementation("androidx.room.ktx")
+    implementation("androidx.core.ktx:1.13.0")
+    implementation("androidx.lifecycle.runtime.ktx:2.7.0")
+    implementation("androidx.activity.compose:1.9.0")
+    implementation("androidx.ui:1.6.6")
+    implementation("androidx.ui.graphics:1.6.6")
+    implementation("androidx.ui.tooling:1.6.6")
+    implementation("androidx.material3:2024.04.01")
+    implementation("androidx.lifecycle.viewmodel.compose:2.7.0")
+    implementation("androidx.room.runtime:2.6.1")
+    implementation("accompanist.swiperefresh:0.35.0-alpha")
+    implementation("androidx.navigation.compose:2.7.0")
+    implementation("androidx.room.ktx:2.6.1")
 }
