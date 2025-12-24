@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.hisense.einkservice"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.hisense.einkservice"
         minSdk = 30
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 7
         versionName = "1.6"
         vectorDrawables {
