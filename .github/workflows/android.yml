@@ -2,27 +2,39 @@ name: Android CI
 
 on:
   workflow_dispatch:
+    inputs:
+      buildtype:
+        description: 'Buildtype (debug, release)'
+        default: 'debug'
+        required: true
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     steps:
+    - name: Prepare Default Environment
+      if: ${{ github.event.inputs.buildtype != 'release' }}
+      run: | 
+        echo "BUILD_TYPE_MC=Debug" >>$GITHUB_ENV
+        echo "BUILD_TYPE_LC=debug" >>$GITHUB_ENV
+    - name: Prepare Release Environment
+      if: ${{ github.event.inputs.buildtype == 'release' }}
+      run: | 
+        echo "BUILD_TYPE_MC=Release" >>$GITHUB_ENV
+        echo "BUILD_TYPE_LC=release" >>$GITHUB_ENV
     - uses: actions/checkout@v4
     - uses: actions/setup-java@v5.1.0
       with:
         java-version: 17
         distribution: 'temurin'
-
     - name: Run Gradle
-      run: gradle --warning-mode=all assembleDebug
+      run: gradle --warning-mode=all assemble${{ env.BUILD_TYPE_MC }}
     - name: Find file
       run: find build/outputs/apk
     - name: Upload APK
       uses: actions/upload-artifact@v6.0.0
       with:
-        name: hisense.apk
-        path: build/outputs/apk/debug/hisense-debug.apk
+        name: ${{ env.BUILD_TYPE_MC }}.apk
+        path: build/outputs/apk/debug/hisense-${{ env.BUILD_TYPE_LC }}.apk
