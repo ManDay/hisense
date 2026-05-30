@@ -11,7 +11,7 @@ jobs:
         echo "BUILD_TYPE_MC=Debug" >>$GITHUB_ENV
         echo "BUILD_TYPE_LC=debug" >>$GITHUB_ENV
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6.0.2
     - name: Setup Java
       uses: actions/setup-java@v5.1.0
       with:
@@ -19,5 +19,5 @@ jobs:
         distribution: 'temurin'
     - name: Setup Android SDK Tools
       uses: android-actions/setup-android@v3.2.1        
-    - name: Test OpenSSH
-      run: openssl --help
+    - name: Test apksigner
+      run: which apksigner
