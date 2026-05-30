@@ -23,4 +23,4 @@ jobs:
        log-accepted-android-sdk-licenses: false
        packages: tools
     - name: Test
-      run: sdkmanager --list
+      run: find $ANDROID_SDK_ROOT
