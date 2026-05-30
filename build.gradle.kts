@@ -1,5 +1,6 @@
 plugins {
   id("com.android.application") version "8.13.2"
+  id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
   id("org.jetbrains.kotlin.android") version "2.2.0"
 }
 
@@ -24,6 +25,13 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 }
 
