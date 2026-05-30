@@ -7,8 +7,8 @@ on:
         description: 'Buildtype (debug, release)'
         default: 'debug'
         required: true
-  push:
-    branches: [ "main" ]
+  #push:
+   # branches: [ "main" ]
 
 jobs:
   Build:
