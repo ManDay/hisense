@@ -50,5 +50,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v6.0.0
       with:
-        name: highsense.apk
-        path: highsense-signed.apk
+        name: hisense.apk
+        path: hisense-signed.apk
