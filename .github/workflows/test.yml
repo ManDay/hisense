@@ -17,10 +17,12 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
+    - name: Check available tools
+      run: sdkmanager --list
     - name: Setup Android SDK Tools
       uses: android-actions/setup-android@v3.2.1   
       with:
        log-accepted-android-sdk-licenses: false
-       packages: build-tools
+       packages: tools
     - name: Test apksigner
       run: apksigner --help
