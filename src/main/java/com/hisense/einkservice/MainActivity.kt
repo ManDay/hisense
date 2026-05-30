@@ -1,5 +1,7 @@
 package com.hisense.einkservice
 
+THIS IS A BUG
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
