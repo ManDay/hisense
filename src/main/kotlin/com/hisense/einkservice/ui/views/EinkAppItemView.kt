@@ -43,12 +43,15 @@ fun EinkAppItemView(
     }
 
     val appIcon = remember {
-        val drawable = packageInfo.applicationInfo.loadIcon(packageManager)
+        val drawable = packageInfo.applicationInfo?.let {
+            it.loadIcon(packageManager)
+        } ?: ContextCompat.getDrawable(context,android.R.drawable.sym_def_app_icon)
+        
         BitmapPainter(drawable.toBitmap().asImageBitmap())
     }
 
     val appName = remember {
-        packageInfo.applicationInfo.loadLabel(packageManager).toString()
+        packageInfo.applicationInfo?.loadLabel(packageManager).toString() ?: "Unknown"
     }
 
     Card {
