@@ -41,7 +41,7 @@ jobs:
     - name: Pack keys
       run: |
         openssl pkcs8 -inform DER -nocrypt -in testkey.pk8 -out testkey.key
-        openssl pkcs12 -export -in testkey.x509.pem -inkey testkey.key -out testkey.p12 -name androiddebugkey -password pass:android
+        openssl pkcs12 -export -in testkey.x509.pem -inkey testkey.key -out testkey.p12 -name testkey -password pass:android
         ls -l testkey.p12
     - name: Run Gradle
       run: gradle --warning-mode=all assemble${{ env.BUILD_TYPE_MC }}
