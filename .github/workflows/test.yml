@@ -18,12 +18,7 @@ jobs:
         java-version: 17
         distribution: 'temurin'
     - name: Checks
-      run: env
-    - name: Setup Android SDK Tools
-      uses: android-actions/setup-android@v4.0.1 
-      with:
-       log-accepted-android-sdk-licenses: false
-       packages: tools
+      run: find "$ANDROID_SDK_ROOT"
     - name: Setup PATH
       run: |
         echo "/usr/local/lib/android/sdk/build-tools/37.0.0" >> $GITHUB_PATH
