@@ -22,5 +22,8 @@ jobs:
       with:
        log-accepted-android-sdk-licenses: false
        packages: tools
+    - name: Setup PATH
+      run: |
+        echo "/usr/local/lib/android/sdk/build-tools/37.0.0" >> $GITHUB_PATH
     - name: Test
-      run: find $ANDROID_SDK_ROOT
+      run: echo "$PATH"; apksigner
