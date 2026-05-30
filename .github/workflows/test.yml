@@ -20,4 +20,4 @@ jobs:
     - name: Setup Android SDK Tools
       uses: android-actions/setup-android@v3.2.1        
     - name: Test apksigner
-      run: which apksigner
+      run: apksigner --help
