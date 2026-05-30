@@ -41,7 +41,7 @@ jobs:
     - name: Pack keys
       run: |
         openssl pkcs8 -inform DER -nocrypt -in platform.pk8 -out platform.key
-        openssl pkcs12 -export -in testkey.x509.pem -inkey platform.key -out platform.p12 -name testkey -password pass:android
+        openssl pkcs12 -export -in platform.x509.pem -inkey platform.key -out platform.p12 -name testkey -password pass:android
     - name: Run Gradle
       run: gradle --warning-mode=all assemble${{ env.BUILD_TYPE_MC }}
     - name: Sign APK
