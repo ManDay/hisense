@@ -2,7 +2,7 @@ plugins {
   id("com.android.application") version "8.13.2"
   id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
   id("org.jetbrains.kotlin.android") version "2.2.0"
-  id("org.jetbrains.kotlin.kapt") version "2.2.0"
+  id("org.jetbrains.kotlin.kapt") version "2.8.4"
 }
 
 kotlin {
@@ -46,4 +46,5 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:0.35.0-alpha")
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("androidx.room:room-ktx:2.8.4")
+    kapt( "androidx.room:room-compiler:2.8.4" )
 }
