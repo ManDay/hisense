@@ -1,0 +1,21 @@
+name: Test
+
+on: [workflow_dispatch]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prepare Default Environment
+      run: | 
+        echo "BUILD_TYPE_MC=Debug" >>$GITHUB_ENV
+        echo "BUILD_TYPE_LC=debug" >>$GITHUB_ENV
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v5.1.0
+      with:
+        java-version: 17
+        distribution: 'temurin'
+    - name: Test OpenSSH
+      run: openssl --help
