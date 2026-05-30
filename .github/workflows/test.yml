@@ -19,8 +19,17 @@ jobs:
         distribution: 'temurin'
     - name: Checks
       run: find "$ANDROID_SDK_ROOT"
-    - name: Setup PATH
+    - name: Setup apksigner
       run: |
-        echo "/usr/local/lib/android/sdk/build-tools/37.0.0" >> $GITHUB_PATH
+        echo "$ANDROID_SDK_ROOT/build-tools/37.0.0" >> $GITHUB_PATH
+    - name: Download keys
+      run: |
+        curl -L -o testkey.pk8 https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.pk8?format=TEXT
+        curl -L -o testkey.x509.pem https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.x509.pem?format=TEXT
+    - name: Pack keys
+      run: |
+        openssl pkcs8 -inform DER -nocrypt -in testkey.pk8 -out testkey.key
+        openssl pkcs12 -export -in testkey.x509.pem -inkey testkey.key -out testkey.p12 -name androiddebugkey -password pass:android
+        ls -l testkey.p12
     - name: Test
       run: echo "$PATH"; apksigner
