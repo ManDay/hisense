@@ -25,16 +25,30 @@ jobs:
         echo "BUILD_TYPE_MC=Release" >>$GITHUB_ENV
         echo "BUILD_TYPE_LC=release" >>$GITHUB_ENV
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6.0.2
     - name: Setup Java
       uses: actions/setup-java@v5.1.0
       with:
         java-version: 17
         distribution: 'temurin'
+    - name: Setup apksigner
+      run: |
+        echo "$ANDROID_SDK_ROOT/build-tools/37.0.0" >> $GITHUB_PATH  
+    - name: Download keys
+      run: |
+        curl -L https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.pk8?format=TEXT | base64 -d > testkey.pk8 
+        curl -L https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.x509.pem?format=TEXT | base64 -d > testkey.x509.pem 
+    - name: Pack keys
+      run: |
+        openssl pkcs8 -inform DER -nocrypt -in testkey.pk8 -out testkey.key
+        openssl pkcs12 -export -in testkey.x509.pem -inkey testkey.key -out testkey.p12 -name androiddebugkey -password pass:android
+        ls -l testkey.p12
     - name: Run Gradle
       run: gradle --warning-mode=all assemble${{ env.BUILD_TYPE_MC }}
+    - name: Sign APK
+      run: apksigner sign --ks testkey.p12 --ks-type PKCS12 --ks-key-alias testkey --ks-pass pass:android --out hisense-signed.apk build/outputs/apk/debug/hisense-${{ env.BUILD_TYPE_LC }}.apk
     - name: Upload APK
       uses: actions/upload-artifact@v6.0.0
       with:
-        name: ${{ env.BUILD_TYPE_MC }}.apk
-        path: build/outputs/apk/debug/hisense-${{ env.BUILD_TYPE_LC }}.apk
+        name: highsense.apk
+        path: highsense-signed.apk
