@@ -45,7 +45,7 @@ fun EinkAppItemView(
     val appIcon = remember {
         val drawable = packageInfo.applicationInfo?.let {
             it.loadIcon(packageManager)
-        } ?: ContextCompat.getDrawable(context,android.R.drawable.sym_def_app_icon)
+        } ?: android.graphics.drawable.ColorDrawable(android.graphics.Color.GRAY)
         
         BitmapPainter(drawable.toBitmap().asImageBitmap())
     }
