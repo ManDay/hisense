@@ -4,6 +4,10 @@ plugins {
   id("org.jetbrains.kotlin.android") version "2.2.0"
 }
 
+kotlin {
+ jvmToolchain(17)
+}
+
 android {
     namespace = "com.hisense.einkservice"
     compileSdk = 35
