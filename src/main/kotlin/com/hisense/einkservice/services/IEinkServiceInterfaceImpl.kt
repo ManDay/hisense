@@ -44,9 +44,9 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
 
     private fun setNightLight(enabled: Boolean) {
         if (enabled) {
-            writeToFile(0.toString(), WHITE_LED)
+            writeToFile("w" + 0.toString(), SRV_FIFO_PATH)
         } else {
-            writeToFile(0.toString(), YELLOW_LED)
+            writeToFile("y" + 0.toString(), SRV_FIFO_PATH)
         }
     }
 
