@@ -87,7 +87,7 @@ class EinkAccessibility : AccessibilityService() {
                     // only change speed if it's different than what it currently is
                     val currentSpeed = einkService.currentSpeed
                     if (currentSpeed != it.preferredSpeed) {
-                        einkService.setSpeed(it.preferredSpeed.getChar())
+                        einkService.setSpeed(it.preferredSpeed.toChar())
                     }
                 }
             }
@@ -213,7 +213,7 @@ class EinkAccessibility : AccessibilityService() {
             }
 
             launch(Dispatchers.Main) {
-                einkService.setSpeed(speed.getChar())
+                einkService.setSpeed(speed.toChar())
                 overlayView.invalidate()
                 overlayView.visibility = View.GONE
             }

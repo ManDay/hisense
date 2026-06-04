@@ -147,13 +147,13 @@ private fun AppsList(
                                 val einkApp = repository.getByPackageName(item.packageName)
 
                                 einkApp?.let {
-                                    einkApp.preferredSpeed = newSpeed.getSpeed()
+                                    einkApp.preferredSpeed = newSpeed
                                     repository.update(einkApp)
 
                                     // apply immediately the new speed for Eink Center
                                     if (einkApp.packageName == context.packageName) {
                                         EinkAccessibility.einkService()
-                                            .setSpeed(newSpeed.getChar())
+                                            .setSpeed(newSpeed.toChar())
                                     }
                                 }
                             }
