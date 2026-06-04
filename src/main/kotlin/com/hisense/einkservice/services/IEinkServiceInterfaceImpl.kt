@@ -24,9 +24,9 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
         writeToFile("r", SRV_FIFO_PATH)
     }
 
-    override fun getCurrentSpeed(): Int {
+    override fun getCurrentSpeed(): EinkSpeed {
         val speed = readFromFile(EINK_PATH + "epd_display_mode")
-        return speed.filter { it.isDigit() }.toInt()
+        return EinkSpeed.fromInt( speed.filter { it.isDigit() }.toInt() )
     }
 
     override fun setTemperature(isNightLight: Boolean, brightness: Int) {
