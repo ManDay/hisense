@@ -87,7 +87,7 @@ class EinkAccessibility : AccessibilityService() {
                     // only change speed if it's different than what it currently is
                     val currentSpeed = einkService.currentSpeed
                     if (currentSpeed != it.preferredSpeed) {
-                        einkService.setSpeed(it.preferredSpeed)
+                        einkService.setSpeed(it.preferredSpeed.getChar())
                     }
                 }
             }
@@ -147,16 +147,16 @@ class EinkAccessibility : AccessibilityService() {
                     EinkOverlay(
                         modifier = Modifier.getBottomPadding(),
                         onClear = {
-                            setSpeedForApp(speed = EinkSpeed.CLEAR.getSpeed())
+                            setSpeedForApp(speed = EinkSpeed.CLEAR)
                         },
                         onBalanced = {
-                            setSpeedForApp(speed = EinkSpeed.BALANCED.getSpeed())
+                            setSpeedForApp(speed = EinkSpeed.BALANCED)
                         },
                         onSmooth = {
-                            setSpeedForApp(speed = EinkSpeed.SMOOTH.getSpeed())
+                            setSpeedForApp(speed = EinkSpeed.SMOOTH)
                         },
                         onFast = {
-                            setSpeedForApp(speed = EinkSpeed.FAST.getSpeed())
+                            setSpeedForApp(speed = EinkSpeed.FAST)
                         },
                     )
                 }
@@ -194,7 +194,7 @@ class EinkAccessibility : AccessibilityService() {
         overlayView.visibility = View.GONE // hide by default
     }
 
-    fun setSpeedForApp(broadcastApp: String? = null, speed: Int) {
+    fun setSpeedForApp(broadcastApp: String? = null, speed: EinkSpeed) {
         CoroutineScope(Dispatchers.IO).launch {
             val app = when {
                 broadcastApp != null -> broadcastApp
@@ -213,7 +213,7 @@ class EinkAccessibility : AccessibilityService() {
             }
 
             launch(Dispatchers.Main) {
-                einkService.setSpeed(speed)
+                einkService.setSpeed(speed.getChar())
                 overlayView.invalidate()
                 overlayView.visibility = View.GONE
             }

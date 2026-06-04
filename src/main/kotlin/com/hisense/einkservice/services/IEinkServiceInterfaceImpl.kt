@@ -14,9 +14,9 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     private val YELLOW_LED = "/sys/devices/platform/soc/4a84000.i2c/i2c-1/1-0036/backlight/aw99703-bl-1/brightness"
     private val WHITE_LED = "/sys/devices/platform/soc/4a80000.i2c/i2c-0/0-0036/backlight/aw99703-bl-2/brightness"
 
-    override fun setSpeed(speed: EinkSpeed) {
+    override fun setSpeed(speed: Char) {
         Log.i(TAG, "setting speed mode: $speed")
-        writeToFile(speed.getChar(), SRV_FIFO_PATH)
+        writeToFile(speed, SRV_FIFO_PATH)
     }
 
     override fun clearScreen() {
