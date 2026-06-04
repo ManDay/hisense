@@ -70,7 +70,7 @@ fun EinkAppItemView(
             }
             Spacer(modifier = Modifier.weight(1f))
             MiniSpeedController(
-                selected = EinkSpeed.fromSpeed(item.preferredSpeed),
+                selected = item.preferredSpeed,
                 onClear = { onSetNewSpeed(EinkSpeed.CLEAR) },
                 onBalanced = { onSetNewSpeed(EinkSpeed.BALANCED) },
                 onSmooth = { onSetNewSpeed(EinkSpeed.SMOOTH) },
@@ -146,7 +146,7 @@ fun EinkAppItemViewPreview() {
     EinkAppItemView(
         item = EinkApp(
             packageName = "com.hisense.einkservice",
-            preferredSpeed = EinkSpeed.FAST.getSpeed(),
+            preferredSpeed = EinkSpeed.FAST,
         ),
         onSetNewSpeed = {},
     )

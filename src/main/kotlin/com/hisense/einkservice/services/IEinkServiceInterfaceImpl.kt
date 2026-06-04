@@ -9,19 +9,19 @@ import java.io.IOException
 
 class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     private val TAG = IEinkServiceInterfaceImpl::class.java.getSimpleName()
-    private val EINK_PATH = "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/"
+    private val SRV_FIFO_PATH = "/mnt/phh/a9srv"
 
     private val YELLOW_LED = "/sys/devices/platform/soc/4a84000.i2c/i2c-1/1-0036/backlight/aw99703-bl-1/brightness"
     private val WHITE_LED = "/sys/devices/platform/soc/4a80000.i2c/i2c-0/0-0036/backlight/aw99703-bl-2/brightness"
 
-    override fun setSpeed(speed: Int) {
+    override fun setSpeed(speed: EinkSpeed) {
         Log.i(TAG, "setting speed mode: $speed")
-        writeToFile(speed.toString(), EINK_PATH + "epd_display_mode")
+        writeToFile(speed.getChar(), SRV_FIFO_PATH)
     }
 
     override fun clearScreen() {
         Log.i(TAG, "clearing screen")
-        writeToFile("1", EINK_PATH + "epd_force_clear")
+        writeToFile("r", SRV_FIFO_PATH)
     }
 
     override fun getCurrentSpeed(): Int {
@@ -33,10 +33,10 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
         val originalScale = NightLightIntensityObserver.originalScale(brightness)
         if (isNightLight) {
             setNightLight(true)
-            writeToFile(originalScale.toString(), YELLOW_LED)
+            writeToFile("y" + originalScale.toString(), SRV_FIFO_PATH)
         } else {
             setNightLight(false)
-            writeToFile(originalScale.toString(), WHITE_LED)
+            writeToFile("w" + originalScale.toString(), SRV_FIFO_PATH)
         }
     }
 

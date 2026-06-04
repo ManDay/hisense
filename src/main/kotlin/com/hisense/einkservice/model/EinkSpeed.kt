@@ -1,13 +1,13 @@
 package com.hisense.einkservice.model
 
-enum class EinkSpeed(private val speed: Int) {
-    CLEAR(515),
-    BALANCED(513),
-    SMOOTH(518),
-    FAST(521),
+enum class EinkSpeed(private val speed: Char) {
+    CLEAR('c'),
+    BALANCED('b'),
+    SMOOTH('s'),
+    FAST('p'),
     ;
 
-    fun getSpeed(): Int {
+    fun toChar(): Char {
         return speed
     }
 

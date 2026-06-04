@@ -153,7 +153,7 @@ private fun AppsList(
                                     // apply immediately the new speed for Eink Center
                                     if (einkApp.packageName == context.packageName) {
                                         EinkAccessibility.einkService()
-                                            .setSpeed(newSpeed.getSpeed())
+                                            .setSpeed(newSpeed)
                                     }
                                 }
                             }
