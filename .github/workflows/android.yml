@@ -53,6 +53,7 @@ jobs:
       with:
         name: hisense.apk
         path: hisense-signed.apk
+        archive: false
     - name: Upload Binaries
       uses: actions/upload-artifact@v6.0.0
       with:
