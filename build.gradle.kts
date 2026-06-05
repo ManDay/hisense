@@ -34,7 +34,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file( "src/main/cpp/CMakeLists.txt" )
-            buildStagingDirectory = file( "outputs/cmake" )
+            buildStagingDirectory = file( "outputs/binaries" )
         }
     }
 }
