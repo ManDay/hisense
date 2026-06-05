@@ -31,6 +31,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
     }
+    externalNativeBuild {
+        cmake {
+            path = file( "CMakeLists.txt" )
+            targets.add( "a9srv" )
+        }
+    }
 }
 
 dependencies {
