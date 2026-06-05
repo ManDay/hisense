@@ -45,7 +45,7 @@ jobs:
         openssl pkcs8 -inform DER -nocrypt -in platform.pk8 -out platform.key
         openssl pkcs12 -export -in platform.x509.pem -inkey platform.key -out platform.p12 -name testkey -password pass:android
     - name: Run Gradle
-      run: gradle --warning-mode=all assemble${{ env.BUILD_TYPE_MC }}
+      run: gradle --warning-mode=all assemble${{ env.BUILD_TYPE_MC }} --info
     - name: Sign APK
       run: apksigner sign --ks platform.p12 --ks-type PKCS12 --ks-key-alias testkey --ks-pass pass:android --out hisense-signed.apk build/outputs/apk/${{ env.BUILD_TYPE_LC }}/hisense-${{ env.BUILD_TYPE_FILE }}.apk
     - name: Upload APK
