@@ -34,7 +34,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file( "src/main/cpp/CMakeLists.txt" )
-            arguments.add( "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/outputs/" )
+            buildStagingDirectory = file( "/outputs/cmake" )
         }
     }
 }
