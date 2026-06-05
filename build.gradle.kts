@@ -34,7 +34,6 @@ android {
     externalNativeBuild {
         cmake {
             path = file( "CMakeLists.txt" )
-            targets.add( "a9srv" )
         }
     }
 }
