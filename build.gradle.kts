@@ -22,12 +22,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        
-        externalNativeBuild {
-            cmake {
-                arguments( "-DRUNTIME_OUTPUT_DIRECTORY=build/outputs/apk" )
-            }
-        }
     }
     buildFeatures {
         compose = true
