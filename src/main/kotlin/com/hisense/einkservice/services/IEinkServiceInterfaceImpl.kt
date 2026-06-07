@@ -10,20 +10,28 @@ import java.io.IOException
 
 class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     private val TAG = IEinkServiceInterfaceImpl::class.java.getSimpleName()
-    private val SRV_FIFO_PATH = "/mnt/phh/a9srv"
+    private val SRV_SOCKET = "testsocket"
+    
     private val EINK_PATH = "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/"
-
     private val YELLOW_LED = "/sys/devices/platform/soc/4a84000.i2c/i2c-1/1-0036/backlight/aw99703-bl-1/brightness"
     private val WHITE_LED = "/sys/devices/platform/soc/4a80000.i2c/i2c-0/0-0036/backlight/aw99703-bl-2/brightness"
+    
+    fun sendCommand( cmd: String ) {
+     val sock = LocalSocket( SOCK_DGRAM )
+     sock.connect( LocalSocketAddress( SRV_SOCKET )
+     socket.outputStream.write( cmd.toByteArray() )
+     socket.outputStream.flush( )
+     sock.disconnect( )
+    }
 
     override fun setSpeed(speed: Char) {
         Log.i(TAG, "setting speed mode: $speed")
-        writeToFile(speed.toString(), SRV_FIFO_PATH)
+        sendCommand( speed.toString() )
     }
 
     override fun clearScreen() {
         Log.i(TAG, "clearing screen")
-        writeToFile("r", SRV_FIFO_PATH)
+        sendCommand( "r" )
     }
 
     override fun getCurrentSpeed(): Char {
@@ -35,18 +43,18 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
         val originalScale = NightLightIntensityObserver.originalScale(brightness)
         if (isNightLight) {
             setNightLight(true)
-            writeToFile("y" + originalScale.toString(), SRV_FIFO_PATH)
+            sendCommand( "y" + originalScale.toString() )
         } else {
             setNightLight(false)
-            writeToFile("w" + originalScale.toString(), SRV_FIFO_PATH)
+            sendCommand( "w" + originalScale.toString() )
         }
     }
 
     private fun setNightLight(enabled: Boolean) {
         if (enabled) {
-            writeToFile("w" + 0.toString(), SRV_FIFO_PATH)
+            sendCommand( "w" + 0.toString() )
         } else {
-            writeToFile("y" + 0.toString(), SRV_FIFO_PATH)
+            sendCommand( "y" + 0.toString() )
         }
     }
 
@@ -68,21 +76,6 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
 
     override fun setLockedScreen(lockscreen: CharArray?) {
         // TODO
-    }
-
-    private fun writeToFile(
-        data: String,
-        filename: String,
-    ) {
-        try {
-            val file = File(filename)
-            val stream = FileOutputStream(file)
-            stream.use { io ->
-                io.write(data.toByteArray())
-            }
-        } catch (e: IOException) {
-            Log.e(TAG, "File write failed: $e")
-        }
     }
 
     private fun readFromFile(
