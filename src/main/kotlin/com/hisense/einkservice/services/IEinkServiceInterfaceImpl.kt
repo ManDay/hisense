@@ -23,7 +23,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
      socket.connect( LocalSocketAddress( SRV_SOCKET ) )
      socket.outputStream.write( cmd.toByteArray() )
      socket.outputStream.flush( )
-     socket.disconnect( )
+     socket.close( )
     }
 
     override fun setSpeed(speed: Char) {
