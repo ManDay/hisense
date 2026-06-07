@@ -19,11 +19,11 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     private val WHITE_LED = "/sys/devices/platform/soc/4a80000.i2c/i2c-0/0-0036/backlight/aw99703-bl-2/brightness"
     
     fun sendCommand( cmd: String ) {
-     val sock = LocalSocket( SOCK_DGRAM )
-     sock.connect( LocalSocketAddress( SRV_SOCKET ) )
+     val socket = LocalSocket( LocalSocket.SOCKET_DGRAM )
+     socket.connect( LocalSocketAddress( SRV_SOCKET ) )
      socket.outputStream.write( cmd.toByteArray() )
      socket.outputStream.flush( )
-     sock.disconnect( )
+     socket.disconnect( )
     }
 
     override fun setSpeed(speed: Char) {
