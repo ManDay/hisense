@@ -1,6 +1,8 @@
 package com.hisense.einkservice.services
 
 import android.util.Log
+import android.net.LocalSocket
+import android.net.LocalSocketAddress
 import com.hisense.einkservice.IEinkServiceInterface
 import com.hisense.einkservice.model.EinkSpeed
 import com.hisense.einkservice.observers.NightLightIntensityObserver
@@ -18,7 +20,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     
     fun sendCommand( cmd: String ) {
      val sock = LocalSocket( SOCK_DGRAM )
-     sock.connect( LocalSocketAddress( SRV_SOCKET )
+     sock.connect( LocalSocketAddress( SRV_SOCKET ) )
      socket.outputStream.write( cmd.toByteArray() )
      socket.outputStream.flush( )
      sock.disconnect( )
