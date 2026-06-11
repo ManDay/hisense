@@ -86,8 +86,8 @@ class EinkAccessibility : AccessibilityService() {
                 repository.getByPackageName(currentApp)?.let {
                     // only change speed if it's different than what it currently is
                     val currentSpeed = einkService.currentSpeed
-                    if (currentSpeed != it.preferredSpeed.toChar()) {
-                        einkService.setSpeed(it.preferredSpeed.toChar())
+                    if (currentSpeed != it.preferredSpeed ) {
+                        einkService.setSpeed(it.preferredSpeed)
                     }
                 }
             }
