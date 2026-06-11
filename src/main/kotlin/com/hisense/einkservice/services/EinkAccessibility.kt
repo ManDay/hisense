@@ -85,8 +85,8 @@ class EinkAccessibility : AccessibilityService() {
             CoroutineScope(Dispatchers.IO).launch {
                 repository.getByPackageName(currentApp)?.let {
                     // only change speed if it's different than what it currently is
-                    val currentSpeed = einkService.currentSpeed
-                    if (currentSpeed != it.preferredSpeed ) {
+                    val currentSpeed = einkService.currentSpeed.speed
+                    if (currentSpeed != it.preferredSpeed.speed ) {
                         einkService.setSpeed(it.preferredSpeed.speed)
                     }
                 }
@@ -213,7 +213,7 @@ class EinkAccessibility : AccessibilityService() {
             }
 
             launch(Dispatchers.Main) {
-                einkService.setSpeed(speed)
+                einkService.setSpeed(speed.speed)
                 overlayView.invalidate()
                 overlayView.visibility = View.GONE
             }

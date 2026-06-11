@@ -13,7 +13,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     private val TAG = IEinkServiceInterfaceImpl::class.java.getSimpleName()
     private val SRV_SOCKET = "testsocket"
     
-    fun srvSet( tgt: Byte,v: ByteArray ) {
+    fun srvSet( tgt: UByte,v: UByteArray ) {
      val socket = LocalSocket( LocalSocket.SOCKET_SEQPACKET )
      socket.connect( LocalSocketAddress( SRV_SOCKET ) )
      socket.outputStream.write( tgt + v )
@@ -21,7 +21,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
      socket.close( )
     }
     
-    fun srvGet( tgt: Byte,r: ByteArray? ) {
+    fun srvGet( tgt: UByte,r: UByteArray? ) {
      val socket = LocalSocket( LocalSocket.SOCKET_SEQPACKET )
      socket.connect( LocalSocketAddress( SRV_SOCKET ) )
      socket.outputStream.write( tgt )
@@ -32,19 +32,19 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
 
     override fun setSpeed(speed: Int) {
         Log.i(TAG, "setting speed mode: $speed")
-        srvSet( 'm'.code.toByte( ),speed.toUByte( ) );
+        srvSet( 'm'.code.toUByte( ),speed.toUByte( ) );
     }
 
     override fun clearScreen() {
         Log.i(TAG, "clearing screen")
-        srvGet( 'c'.code.toByte( ),null );
+        srvGet( 'c'.code.toUByte( ),null );
     }
 
-    override fun getCurrentSpeed(): EinkSpeed {
-        val r = ByteArray(1)
-        srvGet( 'm'.code.toByte( ),r )
+    override fun getCurrentSpeed(): Int {
+        val r = UByteArray(1)
+        srvGet( 'm'.code.toUByte( ),r )
         
-        return EinkSpeed.fromInt( r[0].toInt() )
+        return r[0].toInt()
     }
 
     override fun setTemperature(isNightLight: Boolean, brightness: Int) {
