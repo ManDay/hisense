@@ -30,7 +30,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
      socket.close( )
     }
 
-    override fun setSpeed(speed: int) {
+    override fun setSpeed(speed: Int) {
         Log.i(TAG, "setting speed mode: $speed")
         srvSet( 'm'.code.toByte( ),speed.toUByte( ) );
     }
