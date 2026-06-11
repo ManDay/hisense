@@ -1,9 +1,9 @@
 package com.hisense.einkservice;
 
 interface IEinkServiceInterface {
-    void setSpeed(char speed);
+    void setSpeed(int speed);
     void clearScreen();
-    char getCurrentSpeed();
+    int getCurrentSpeed();
     void setTemperature(boolean isNightLight, int brightness);
     boolean isNightLight();
     int getBrightness();

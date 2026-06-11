@@ -7,7 +7,7 @@ enum class EinkSpeed(private val speed: Int) {
     FAST(3);
     
     companion object {
-        fun fromInt( speed: Int ): Status {
+        fun fromInt( speed: Int ): EinkSpeed {
             return values().firstOrNull { it.speed == speed } ?: BALANCED
         }
     }

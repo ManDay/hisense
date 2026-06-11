@@ -40,7 +40,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
         srvGet( 'c',null );
     }
 
-    override fun getCurrentSpeed(): Int {
+    override fun getCurrentSpeed(): EinkSpeed {
         val speed = readFromFile(EINK_PATH + "epd_display_mode")
         
         r = ByteArray(1)
