@@ -24,7 +24,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     fun srvGet( tgt: Byte,r: ByteArray? ) {
      val socket = LocalSocket( LocalSocket.SOCKET_SEQPACKET )
      socket.connect( LocalSocketAddress( SRV_SOCKET ) )
-     socket.outputStream.write( tgt )
+     socket.outputStream.write( byteArrayOf( tgt ) )
      socket.outputStream.flush( )
      r?.let { socket.inputStream.read( r ) }
      socket.close( )
