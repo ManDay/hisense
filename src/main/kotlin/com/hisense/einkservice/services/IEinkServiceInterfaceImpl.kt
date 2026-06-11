@@ -21,7 +21,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
      socket.close( )
     }
     
-    fun srvGet( tgt: Byte,r: ByteArray ) {
+    fun srvGet( tgt: Byte,r: ByteArray? ) {
      val socket = LocalSocket( LocalSocket.SOCKET_SEQPACKET )
      socket.connect( LocalSocketAddress( SRV_SOCKET ) )
      socket.outputStream.write( tgt )
@@ -30,23 +30,21 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
      socket.close( )
     }
 
-    override fun setSpeed(speed: Int) {
+    override fun setSpeed(speed: EinkSpeed) {
         Log.i(TAG, "setting speed mode: $speed")
-        srvSet( 'm'.code.toByte( ),speed.toUByte( ) );
+        srvSet( 'm'.code.toByte( ),speed.speed.toUByte( ) );
     }
 
     override fun clearScreen() {
         Log.i(TAG, "clearing screen")
-        srvGet( 'c',null );
+        srvGet( 'c'.code.toByte( ),null );
     }
 
     override fun getCurrentSpeed(): EinkSpeed {
-        val speed = readFromFile(EINK_PATH + "epd_display_mode")
-        
         r = ByteArray(1)
         srvGet( 'm'.code.toByte( ),r )
         
-        return r[0].toInt()
+        return EinkSpeed.fromInt( r[0].toInt() )
     }
 
     override fun setTemperature(isNightLight: Boolean, brightness: Int) {
