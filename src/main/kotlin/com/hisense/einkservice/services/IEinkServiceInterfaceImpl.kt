@@ -30,9 +30,9 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
      socket.close( )
     }
 
-    override fun setSpeed(speed: EinkSpeed) {
+    override fun setSpeed(speed: int) {
         Log.i(TAG, "setting speed mode: $speed")
-        srvSet( 'm'.code.toByte( ),speed.speed.toUByte( ) );
+        srvSet( 'm'.code.toByte( ),speed.toUByte( ) );
     }
 
     override fun clearScreen() {
@@ -41,7 +41,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     }
 
     override fun getCurrentSpeed(): EinkSpeed {
-        r = ByteArray(1)
+        val r = ByteArray(1)
         srvGet( 'm'.code.toByte( ),r )
         
         return EinkSpeed.fromInt( r[0].toInt() )
