@@ -10,8 +10,8 @@ class EinkCenterNewAppReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val packageName = intent.getStringExtra("packageName")
-        val speed = intent.getCharExtra("speed", EinkSpeed.BALANCED.toChar())
+        val speed = intent.getIntExtra("speed", EinkSpeed.BALANCED )
         val accessibilityService = EinkAccessibility.getInstance()
-        accessibilityService.setSpeedForApp(packageName, EinkSpeed.fromChar( speed ))
+        accessibilityService.setSpeedForApp( packageName,EinkSpeed )
     }
 }
