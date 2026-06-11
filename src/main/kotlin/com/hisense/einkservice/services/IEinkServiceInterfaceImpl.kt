@@ -16,7 +16,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     fun srvSet( tgt: Byte,v: ByteArray ) {
      val socket = LocalSocket( LocalSocket.SOCKET_SEQPACKET )
      socket.connect( LocalSocketAddress( SRV_SOCKET ) )
-     socket.outputStream.write( tgt + v )
+     socket.outputStream.write( byteArrayOf( tgt )+ v )
      socket.outputStream.flush( )
      socket.close( )
     }
@@ -32,7 +32,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
 
     override fun setSpeed(speed: Int) {
         Log.i(TAG, "setting speed mode: $speed")
-        srvSet( 'm'.code.toByte( ),speed.toByte( ) );
+        srvSet( 'm'.code.toByte( ),byteArrayOf( speed.toByte( ) ) );
     }
 
     override fun clearScreen() {
