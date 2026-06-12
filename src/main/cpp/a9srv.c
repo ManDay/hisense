@@ -23,15 +23,10 @@
 #define BUFFER_SIZE 512
 #define DISP_BASE "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/"
 
-//#define DISP_MODE ( DISP_BASE "epd_display_mode" )
-//#define DISP_CLEAR ( DISP_BASE "epd_force_clear" )
-//#define LED_BASE "/sys/class/backlight/aw99703-bl-"
-//#define LED_BRIGHTNESS "/brightness"
-
-#define DISP_MODE "/tmp/disp_mode"
-#define DISP_CLEAR "/tmp/disp_clear"
-#define LED_BASE "/tmp/led"
-#define LED_BRIGHTNESS "bright"
+#define DISP_MODE ( DISP_BASE "epd_display_mode" )
+#define DISP_CLEAR ( DISP_BASE "epd_force_clear" )
+#define LED_BASE "/sys/class/backlight/aw99703-bl-"
+#define LED_BRIGHTNESS "/brightness"
 
 #define LED_PATH( yellow ) ( yellow ? ( LED_BASE "1" LED_BRIGHTNESS ) : ( LED_BASE "2" LED_BRIGHTNESS ) )
 
