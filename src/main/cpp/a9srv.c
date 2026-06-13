@@ -8,35 +8,35 @@
 #include <stdbool.h>
 #include <string.h>
 
-/* Socket Protocol
- *
- * <id>=<value> Sets a value
- * <id> Gets a value
- * <id>! Toggles a value
- */
+#define SOCKET_NAME "\0a9srv"
 
-#define COUNT( array ) ( sizeof( array )/sizeof( array[ 0 ] ) )
-#define REDUCE( type,var,src,n ) type var = 0; memcpy( &var,src,( n )<sizeof( type ) ? ( n ) : sizeof( type ) )
-#define ASSERT0( val ) assert( ( val )!= -1 )
-
-#define SOCKET_NAME "\0testsocket"
-#define BUFFER_SIZE 512
 #define DISP_BASE "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/"
+#define DISP_MODE "epd_display_mode"
+#define DISP_CLEAR "epd_force_clear"
 
-#define DISP_MODE ( DISP_BASE "epd_display_mode" )
-#define DISP_CLEAR ( DISP_BASE "epd_force_clear" )
-#define LED_BASE "/sys/class/backlight/aw99703-bl-"
-#define LED_BRIGHTNESS "/brightness"
+#define LED_BASE_ALL "/sys/class/backlight/aw99703-bl-"
+#define LED_BRIGHTNESS "brightness"
+#define LED_PATH( yellow ) ( yellow ? ( LED_BASE_ALL "1/" LED_BRIGHTNESS ) : ( LED_BASE_ALL "2/" LED_BRIGHTNESS ) )
 
-#define LED_PATH( yellow ) ( yellow ? ( LED_BASE "1" LED_BRIGHTNESS ) : ( LED_BASE "2" LED_BRIGHTNESS ) )
+#define BAT_BASE "/sys/class/power_supply/battery/"
+#define BAT_CTRL "charge_control_limit"
+#define BAT_STAT "status"
 
 const short epd_mode_ids[ ]= { 515,513,518,521 };
+
+#define COUNT( array ) ( sizeof( array )/sizeof( array[ 0 ] ) )
+#define GETFILE( TARGET,VARNAME,SIZE ) char VARNAME[ SIZE ]; read_file( TARGET,VARNAME,SIZE ); VARNAME[ SIZE - 1 ]= '\0'
+#define MIN( a,b ) ( (a) < (b) ? (a) : (b) )
+#define RETBUF( TARGET,N,TYPE,RESULT ) { TYPE result = RESULT; memcpy( TARGET,&result,MIN( N,sizeof( TYPE ) ) ); return MIN( N,sizeof( TYPE ) ); }
+#define RETVAL( TARGET,N,TYPE,SRC ) TYPE TARGET; memcpy( &TARGET,SRC,MIN( sizeof( TYPE ),N ) );
+#define ASSERT0( val ) assert( ( val )!= -1 )
  
-void write_file( const char* const f,const char* const s,size_t l ) {
+bool write_file( const char* const f,const char* const s,size_t l ) {
  int fd;
- ASSERT0( ( fd = open( f,O_WRONLY ) ) );
+ ASSERT0( ( fd = open( f,O_WRONLY | O_TRUNC ) ) );
  ASSERT0( write( fd,s,l ) );
  close( fd );
+ return true;
 }
 
 void read_file( const char* const f,char* const s,size_t l ) {
@@ -46,51 +46,88 @@ void read_file( const char* const f,char* const s,size_t l ) {
  close( fd );
 }
 
-void epd_write( char mode ) {
- short code = epd_mode_ids[ mode % COUNT( epd_mode_ids ) ];
-
- char s[4];
- snprintf( s,sizeof( s ),"%hi\n",code );
- write_file( DISP_MODE,s,sizeof( s ) );
+size_t led_read( bool yellow,void* b,size_t n ) {
+ GETFILE( LED_PATH( yellow ),s,5 ); 
+ RETBUF( b,n,short,(short)(strtol( s,NULL,0 )) )
 }
 
-char epd_read( ) {
- char s[4];
+size_t epd_read( void* b,size_t n ) {
+ GETFILE( DISP_BASE DISP_MODE,s,4 );
  
- read_file( DISP_MODE,s,sizeof( s ) );
- s[ 3 ]= '\0';
  long l = strtol( s,NULL,0 );
- 
- for( char i = 0; i<COUNT( epd_mode_ids ); i++ )
+ size_t i;
+ for( i = 0; i < COUNT( epd_mode_ids )- 1; i++ )
   if( l == epd_mode_ids[ i ] )
-   return i;
+   break;
  
+ RETBUF( b,n,char,(char)(i) )
+}
+
+size_t bat_read( void* b,size_t n ) {
+ GETFILE( BAT_BASE BAT_STAT,s,9 );
+ RETBUF( b,n,bool,strncmp( s,"Charging",8 )== 0 ) 
+}
+
+size_t epd_clear( void* b,size_t n ) {
+ write_file( DISP_BASE DISP_CLEAR,"1\n",2 );
  return 0;
 }
 
-void epd_clear( ) {
- write_file( DISP_CLEAR,"1",1 );
+bool epd_write( void* b,size_t n ) {
+ RETVAL( mode,n,size_t,b );
+ 
+ short code = epd_mode_ids[ mode % COUNT( epd_mode_ids ) ];
+ 
+ char s[ BUFSIZ ];
+ return write_file( DISP_BASE DISP_MODE,s,snprintf( s,sizeof( s ),"%hi\n",code ) );
 }
 
-void led_write( bool yellow,char val ) {
- char s[4];
- write_file( LED_PATH( yellow ),s,snprintf( s,sizeof( s ),"%hi\n",val ) );
+bool led_write( bool yellow,void* b,size_t n ) {
+ RETVAL( val,n,short,b );
+ char s[ BUFSIZ ];
+ return write_file( LED_PATH( yellow ),s,snprintf( s,sizeof( s ),"%hi\n",val ) );
 } 
 
-char led_read( bool yellow ) {
- char s[4];
+bool bat_write( void* b,size_t n) {
+ RETVAL( charge,n,bool,b )
  
- read_file( LED_PATH( yellow ),s,sizeof( s ) );
- long l = strtol( s,NULL,0 );
- 
- char result = l;
- 
- return result;
+ if( charge )
+  return write_file( BAT_BASE BAT_CTRL,"0\n",2 );
+ else
+  return write_file( BAT_BASE BAT_CTRL,"10\n",3 );
+}
+
+struct Action {
+ char id;
+ bool (*writer)( void*,size_t );
+ size_t (*reader)( void*,size_t );
+};
+
+// A kingdom for currying or even just lambdas...
+size_t white_read( void* b,size_t n ) { return led_read( false,b,n ); }
+size_t yellow_read( void* b,size_t n ) { return led_read( true,b,n ); }
+bool white_write( void* b,size_t n ) { return led_write( false,b,n ); }
+bool yellow_write( void* b,size_t n ) { return led_write( true,b,n ); }
+
+const struct Action action_map[ ] = {
+ { 'm',epd_write,epd_read },
+ { 'c',NULL,epd_clear },
+ { 'b',bat_write,bat_read },
+ { 'w',white_write,white_read },
+ { 'y',yellow_write,yellow_read }
+};
+
+size_t get_action( char id ) {
+ size_t i;
+ for( i = COUNT( action_map ); i > 0; i-- )
+  if( action_map[ i - 1 ].id == id )
+   break;
+ return i;
 }
 
 int main( void ) {
  int sock;
- char buffer[ BUFFER_SIZE ];
+ char buffer[ BUFSIZ ];
  
  struct sockaddr_un server_addr = { AF_UNIX,SOCKET_NAME };
 
@@ -104,34 +141,21 @@ int main( void ) {
   int cmdstream = accept( sock,NULL,NULL );
   
   size_t i;
-  while( ( i = read( cmdstream,buffer,BUFFER_SIZE-1 ) )> 0 ) {
-   buffer[ i ]= '\0';
-   char cmd = buffer[ 0 ];
-   char* args = i>1 ? buffer + 1 : NULL;
+  while( ( i = read( cmdstream,buffer,BUFSIZ-1 ) )> 0 ) {
+   size_t action_idx = get_action( buffer[ 0 ] );
    
-   if( cmd == 'm' )
-    if( args ) {
-     REDUCE( char,val,args,i - 1 );
-     epd_write( val );
-    } else {
-     char val = epd_read( );
-     ASSERT0( write( cmdstream,&val,sizeof( epd_read ) ) );
-    }
-   else if( cmd == 'c' )
-    epd_clear( );
-   else {
-    bool white = cmd == 'w';
-    if( white || cmd == 'y' )
-     if( args ) {
-      REDUCE( char,val,args,i - 1 );
-      led_write( white,val );
-     } else {
-      char val = led_read( white );
-      ASSERT0( write( cmdstream,&val,sizeof( led_read ) ) );
-     }
-    else
-     fprintf( stderr,"Did not understand '%c'\n",cmd ); 
-   }
+   if( action_idx ) {
+    struct Action a = action_map[ action_idx - 1 ];
+    
+    if( i > 1 && a.writer )
+     a.writer( buffer + 1,i - 1 );
+    else {
+     char result[ BUFSIZ ];
+     size_t n = a.reader( result,BUFSIZ );
+     ASSERT0( write( cmdstream,result,n ) ); 
+    };
+   } else
+    fprintf( stderr,"Did not understand '%c'\n",buffer[ 0 ] );
   }
   
   close( cmdstream );
