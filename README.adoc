@@ -1,0 +1,20 @@
+# Installation
+
+Add `a9srv` binary to `/system/bin`
+
+## Modify `/system/etc/init/vndk.rc`
+
+Add anywhere
+
+```
+service a9srv /system/bin/a9srv
+ disabled
+```
+
+Add to `on property:sys.boot_completed=1` section
+
+```
+exec_background u:r:phhsu_daemon:s0 root -- chmod 644 /sys/class/power_supply/battery/charge_control_limit
+start a9srv
+```
+
