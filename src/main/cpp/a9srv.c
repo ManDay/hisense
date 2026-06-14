@@ -33,7 +33,7 @@ const unsigned short epd_mode_ids[ ]= { 515,513,518,521 };
 #define GETFILE( TARGET,VARNAME,SIZE ) char VARNAME[ SIZE ]; read_file( TARGET,VARNAME,SIZE ); VARNAME[ SIZE - 1 ]= '\0'
 #define MIN( a,b ) ( (a) < (b) ? (a) : (b) )
 #define RETBUF( TARGET,N,TYPE,RESULT ) { TYPE result = RESULT; memcpy( TARGET,&result,MIN( N,sizeof( TYPE ) ) ); return MIN( N,sizeof( TYPE ) ); }
-#define RETVAL( TARGET,N,TYPE,SRC ) TYPE TARGET; memcpy( &TARGET,SRC,MIN( sizeof( TYPE ),N ) );
+#define RETVAL( TARGET,N,TYPE,SRC ) TYPE TARGET = 0; memcpy( &TARGET,SRC,MIN( sizeof( TYPE ),N ) );
 #define ASSERT0( val ) assert( ( val )!= -1 )
  
 bool write_file( const char* const f,const char* const s,size_t l ) {
