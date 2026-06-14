@@ -4,3 +4,6 @@ Download a compatible https://github.com/TrebleDroid/treble_experimentations/wik
 
 Follow along the instructions of `install.sh` to create a flashable *Super*-Image.
 
+Mind the following caveats and limitations
+
+* The Treble settings app will attempt to reset "Disable HW Overlays" unless you activate the option through "`Developer Options`" or the Treble app itself
