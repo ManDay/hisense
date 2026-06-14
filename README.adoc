@@ -1,20 +1,6 @@
 # Installation
 
-Add `a9srv` binary to `/system/bin`
+Download a compatible https://github.com/TrebleDroid/treble_experimentations/wiki/Generic-System-Image-%28GSI%29-list[Generic System Image]. To check compatibility, use https://f-droid.org/packages/vegabobo.dsusideloader[DSU Sideloader] (or the respective option in "`Developer Options`") to try out whether arbitrary `system.img` files boot with the device.
 
-## Modify `/system/etc/init/vndk.rc`
-
-Add anywhere
-
-```
-service a9srv /system/bin/a9srv
- disabled
-```
-
-Add to `on property:sys.boot_completed=1` section
-
-```
-exec_background u:r:phhsu_daemon:s0 root -- chmod 644 /sys/class/power_supply/battery/charge_control_limit
-start a9srv
-```
+Follow along the instructions of `install.sh` to create a flashable *Super*-Image.
 
