@@ -165,7 +165,7 @@ int main( void ) {
     else {
      char result[ BUFSIZ ];
      size_t n = a.reader( result,BUFSIZ );
-     ASSERT0( write( cmdstream,result,n ) ); 
+     write( cmdstream,result,n ); 
     };
    } else
     fprintf( stderr,"Did not understand '%c'\n",buffer[ 0 ] );
