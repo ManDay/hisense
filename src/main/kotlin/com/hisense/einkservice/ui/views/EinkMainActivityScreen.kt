@@ -82,9 +82,13 @@ fun EinkMainActivityScreen(
                 if (apps.isEmpty()) {
                     TutorialNotice()
                 }
-                Button (
-                 onClick = { EinkAccessibility.einkService().clearScreen( ) }
-                ) { Text( "Do something" ) }
+                Button ( onClick = { EinkAccessibility.einkService().srvSet( 'y'.code.toByte( ),byteArrayOf( ( 2047 shr 8 ).toByte(),0.toByte() ) ) } ) { Text( "Yellow On" ) }
+                Button ( onClick = { EinkAccessibility.einkService().srvSet( 'w'.code.toByte( ),byteArrayOf( ( 2047 shr 8 ).toByte(),0.toByte() ) ) } ) { Text( "White On" ) }
+                Button ( onClick = { EinkAccessibility.einkService().srvSet( 'y'.code.toByte( ),byteArrayOf( 0.toByte() ) ) } ) { Text( "Yellow Off" ) }
+                Button ( onClick = { EinkAccessibility.einkService().srvSet( 'w'.code.toByte( ),byteArrayOf( 0.toByte() ) ) } ) { Text( "White Off" ) }
+                Button ( onClick = { EinkAccessibility.einkService().srvSet( 'b'.code.toByte( ),byteArrayOf( 1.toByte() ) ) } ) { Text( "Charge Yes" ) }
+                Button ( onClick = { EinkAccessibility.einkService().srvSet( 'b'.code.toByte( ),byteArrayOf( 0.toByte() ) ) } ) { Text( "Charge No" ) }
+                 
                 AppsList(apps = apps, onSwipe = onSwipe)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
