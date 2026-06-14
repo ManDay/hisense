@@ -226,10 +226,10 @@ private fun TutorialNotice() {
                 "No apps yet \uD83D\uDE2D. Let's change that!",
                 fontWeight = FontWeight.Bold,
             )
-            Text(
+            /*Text(
                 text = stringResource(id = R.string.eink_tutorial_text),
                 style = MaterialTheme.typography.bodySmall
-            )
+            )*/
             Text(
                 text = "This tutorial will disappear once you add an app. Let's GO! \uD83D\uDE80",
                 style = MaterialTheme.typography.labelSmall

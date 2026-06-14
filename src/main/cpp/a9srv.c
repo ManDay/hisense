@@ -23,10 +23,6 @@
 #define BAT_CTRL "charge_control_limit"
 #define BAT_STAT "status"
 
-/*#define DISP_BASE "/tmp/a9srv/"
-#define LED_BASE_ALL DISP_BASE
-#define BAT_BASE DISP_BASE*/
-
 const unsigned short epd_mode_ids[ ]= { 515,513,518,521 };
 
 #define COUNT( array ) ( sizeof( array )/sizeof( array[ 0 ] ) )
@@ -164,10 +160,12 @@ int main( void ) {
    if( action_idx ) {
     struct Action a = action_map[ action_idx - 1 ];
     
+ /*
     fprintf( stderr,"Action '%c' with arguments '",a.id );
     for( int j = 1; j<i; j++ )
      fprintf( stderr,"\\%02hhx",buffer[ j ] );
     fprintf( stderr,"'\n" );
+*/
 
     if( i > 1 && a.writer )
      a.writer( buffer + 1,i - 1 );
@@ -177,7 +175,7 @@ int main( void ) {
      write( cmdstream,result,n ); 
     };
    } else
-    fprintf( stderr,"Did not understand '%c'\n",buffer[ 0 ] );
+    fprintf( stderr,"A9Srv did not understand '%c'\n",buffer[ 0 ] );
   }
   
   close( cmdstream );
