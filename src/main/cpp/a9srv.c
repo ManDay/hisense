@@ -23,7 +23,11 @@
 #define BAT_CTRL "charge_control_limit"
 #define BAT_STAT "status"
 
-const short epd_mode_ids[ ]= { 515,513,518,521 };
+/*#define DISP_BASE "/tmp/a9srv/"
+#define LED_BASE_ALL DISP_BASE
+#define BAT_BASE DISP_BASE*/
+
+const unsigned short epd_mode_ids[ ]= { 515,513,518,521 };
 
 #define COUNT( array ) ( sizeof( array )/sizeof( array[ 0 ] ) )
 #define GETFILE( TARGET,VARNAME,SIZE ) char VARNAME[ SIZE ]; read_file( TARGET,VARNAME,SIZE ); VARNAME[ SIZE - 1 ]= '\0'
@@ -49,12 +53,12 @@ void read_file( const char* const f,char* const s,size_t l ) {
 
 size_t led_read( bool yellow,void* b,size_t n ) {
  GETFILE( LED_PATH( yellow ),s,5 ); 
- RETBUF( b,n,short,(short)(strtol( s,NULL,0 )) )
+ RETBUF( b,n,unsigned short,(unsigned short)(strtol( s,NULL,0 )) )
 }
 
 size_t cont_read( void* b,size_t n ) {
  GETFILE( DISP_BASE DISP_CONT,s,5 ); 
- RETBUF( b,n,short,(short)(strtol( s,NULL,0 )) )
+ RETBUF( b,n,unsigned char,(unsigned char)(strtol( s,NULL,0 )) )
 }
 
 size_t epd_read( void* b,size_t n ) {
@@ -66,7 +70,7 @@ size_t epd_read( void* b,size_t n ) {
   if( l == epd_mode_ids[ i ] )
    break;
  
- RETBUF( b,n,char,(char)(i) )
+ RETBUF( b,n,unsigned char,(unsigned char)(i) )
 }
 
 size_t bat_read( void* b,size_t n ) {
@@ -82,22 +86,22 @@ size_t epd_clear( void* b,size_t n ) {
 bool epd_write( void* b,size_t n ) {
  RETVAL( mode,n,size_t,b );
  
- short code = epd_mode_ids[ mode % COUNT( epd_mode_ids ) ];
+ unsigned short code = epd_mode_ids[ mode % COUNT( epd_mode_ids ) ];
  
  char s[ BUFSIZ ];
- return write_file( DISP_BASE DISP_MODE,s,snprintf( s,sizeof( s ),"%hi\n",code ) );
+ return write_file( DISP_BASE DISP_MODE,s,snprintf( s,sizeof( s ),"%hu\n",code ) );
 }
 
 bool led_write( bool yellow,void* b,size_t n ) {
- RETVAL( val,n,short,b );
+ RETVAL( val,n,unsigned short,b );
  char s[ BUFSIZ ];
- return write_file( LED_PATH( yellow ),s,snprintf( s,sizeof( s ),"%hi\n",val ) );
+ return write_file( LED_PATH( yellow ),s,snprintf( s,sizeof( s ),"%hu\n",val ) );
 }
 
 bool cont_write( void* b,size_t n ) {
- RETVAL( val,n,short,b );
+ RETVAL( val,n,unsigned char,b );
  char s[ BUFSIZ ];
- return write_file( DISP_BASE DISP_CONT,s,snprintf( s,sizeof( s ),"%hi\n",val ) );
+ return write_file( DISP_BASE DISP_CONT,s,snprintf( s,sizeof( s ),"%hhu\n",val ) );
 }
 
 bool bat_write( void* b,size_t n) {
@@ -160,6 +164,11 @@ int main( void ) {
    if( action_idx ) {
     struct Action a = action_map[ action_idx - 1 ];
     
+    fprintf( stderr,"Action '%c' with arguments '",a.id );
+    for( int j = 1; j<i; j++ )
+     fprintf( stderr,"\\%02hhx",buffer[ j ] );
+    fprintf( stderr,"'\n" );
+
     if( i > 1 && a.writer )
      a.writer( buffer + 1,i - 1 );
     else {
