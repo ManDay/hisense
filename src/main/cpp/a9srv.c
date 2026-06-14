@@ -13,6 +13,7 @@
 #define DISP_BASE "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/"
 #define DISP_MODE "epd_display_mode"
 #define DISP_CLEAR "epd_force_clear"
+#define DISP_CONT "epd_contrast"
 
 #define LED_BASE_ALL "/sys/class/backlight/aw99703-bl-"
 #define LED_BRIGHTNESS "brightness"
@@ -51,6 +52,11 @@ size_t led_read( bool yellow,void* b,size_t n ) {
  RETBUF( b,n,short,(short)(strtol( s,NULL,0 )) )
 }
 
+size_t cont_read( void* b,size_t n ) {
+ GETFILE( DISP_BASE DISP_CONT,s,5 ); 
+ RETBUF( b,n,short,(short)(strtol( s,NULL,0 )) )
+}
+
 size_t epd_read( void* b,size_t n ) {
  GETFILE( DISP_BASE DISP_MODE,s,4 );
  
@@ -86,7 +92,13 @@ bool led_write( bool yellow,void* b,size_t n ) {
  RETVAL( val,n,short,b );
  char s[ BUFSIZ ];
  return write_file( LED_PATH( yellow ),s,snprintf( s,sizeof( s ),"%hi\n",val ) );
-} 
+}
+
+bool cont_write( void* b,size_t n ) {
+ RETVAL( val,n,short,b );
+ char s[ BUFSIZ ];
+ return write_file( DISP_BASE DISP_CONT,s,snprintf( s,sizeof( s ),"%hi\n",val ) );
+}
 
 bool bat_write( void* b,size_t n) {
  RETVAL( charge,n,bool,b )
@@ -111,7 +123,8 @@ bool yellow_write( void* b,size_t n ) { return led_write( true,b,n ); }
 
 const struct Action action_map[ ] = {
  { 'm',epd_write,epd_read },
- { 'c',NULL,epd_clear },
+ { 'r',NULL,epd_clear },
+ { 'c',cont_write,cont_read },
  { 'b',bat_write,bat_read },
  { 'w',white_write,white_read },
  { 'y',yellow_write,yellow_read }

@@ -81,6 +81,9 @@ fun EinkMainActivityScreen(
                 if (apps.isEmpty()) {
                     TutorialNotice()
                 }
+                Button (
+                 onClick = { EinkAccessibility.einkService().clearScreen( ) }
+                ) { Text( "Do something" ) }
                 AppsList(apps = apps, onSwipe = onSwipe)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(

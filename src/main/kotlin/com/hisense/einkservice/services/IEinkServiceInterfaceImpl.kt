@@ -11,7 +11,7 @@ import java.io.IOException
 
 class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
     private val TAG = IEinkServiceInterfaceImpl::class.java.getSimpleName()
-    private val SRV_SOCKET = "testsocket"
+    private val SRV_SOCKET = "a9srv"
     
     fun srvSet( tgt: Byte,v: ByteArray ) {
      val socket = LocalSocket( LocalSocket.SOCKET_SEQPACKET )
@@ -37,7 +37,7 @@ class IEinkServiceInterfaceImpl : IEinkServiceInterface.Stub() {
 
     override fun clearScreen() {
         Log.i(TAG, "clearing screen")
-        srvGet( 'c'.code.toByte( ),null );
+        srvGet( 'r'.code.toByte( ),null );
     }
 
     override fun getCurrentSpeed(): Int {
