@@ -2,7 +2,13 @@
 
 Download a compatible https://github.com/TrebleDroid/treble_experimentations/wiki/Generic-System-Image-%28GSI%29-list[Generic System Image]. To check compatibility, use https://f-droid.org/packages/vegabobo.dsusideloader[DSU Sideloader] (or the respective option in "`Developer Options`") to try out whether arbitrary `system.img` files boot with the device.
 
-Follow along the instructions of `install.sh` to create a flashable *Super*-Image.
+Download the `binaries` ZIP-File from the generated artefacts and extract the `a9srv` binary which corresponds to your architecture (probably `arm64`).
+
+Download the `hisense-signed.apk` package.
+
+Follow along the instructions of `install.sh` to create a flashable *Super*-Image. Flash the super-image and reboot.
+
+Install `hisense-signed.apk`.
 
 Mind the following caveats and limitations
 
